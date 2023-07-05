@@ -95,12 +95,13 @@ public class Game
     }
   }
 
-  public HtmlString Html
+  public HtmlString Html => GenerateHtml();
+  public HtmlString HtmlWithOutcome(Symbol outcome) => GenerateHtml(outcome);
+
+  private HtmlString GenerateHtml(Symbol? outcome = null)
   {
-    get
-    {
-      var sb = new StringBuilder();
-      sb.Append("""
+    var sb = new StringBuilder();
+    sb.Append("""
     <!DOCTYPE html>
     <html>
     <head>
@@ -130,29 +131,39 @@ public class Game
       <div class="board">
     """);
 
-      for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
+    {
+      sb.Append("<div class=\"row\">");
+      for (int j = 0; j < 3; j++)
       {
-        sb.Append("<div class=\"row\">");
-        for (int j = 0; j < 3; j++)
+        sb.Append("<div class=\"cell\">");
+        var index = i * 3 + j;
+        sb.Append(squares[index] switch
         {
-          sb.Append("<div class=\"cell\">");
-          var index = i * 3 + j;
-          sb.Append(squares[index] switch
-          {
-            Symbol.X => "X",
-            Symbol.O => "O",
-            _ => ""
-          });
-          sb.Append("</div>");
-        }
+          Symbol.X => "X",
+          Symbol.O => "O",
+          _ => ""
+        });
         sb.Append("</div>");
       }
-      sb.Append("""
+      sb.Append("</div>");
+    }
+    if (outcome != null)
+    {
+      sb.Append("<div>");
+      sb.Append(outcome switch
+      {
+        Symbol.X => "X wins",
+        Symbol.O => "O wins",
+        _ => "Draw"
+      });
+      sb.Append("</div>");
+    }
+    sb.Append("""
       </div>
     </body>
     </html>
     """);
-      return new HtmlString(sb.ToString());
-    }
+    return new HtmlString(sb.ToString());
   }
 }
