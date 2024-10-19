@@ -9,7 +9,7 @@ public record Institution(string identifier) {}
 public record Course(Institution institution, string code) {}
 
 [FactType("School.Course.Title")]
-public record CourseTitle(Course course, string title, CourseTitle[] prior) {}
+public record CourseTitle(Course course, string value, CourseTitle[] prior) {}
 
 [FactType("School.Course.Credits")]
-public record CourseCredits(Course course, int credits, CourseCredits[] prior) {}
+public record CourseCredits(Course course, int value, CourseCredits[] prior) {}
